@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
@@ -35,6 +37,8 @@ public class CompletedFragment extends Fragment {
     OrderViewModel orderViewModel;
     OrderAdapter orderAdapter;
     RecyclerView recyclerView;
+    ConstraintLayout constraintLayout;
+    LinearLayout linearLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,10 +57,11 @@ public class CompletedFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_completed, container, false);
+        constraintLayout = view.findViewById(R.id.cl1);
+        linearLayout= view.findViewById(R.id.no_order);
         recyclerView = view.findViewById(R.id.recycler_view1);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
         loaddata();
         return view;
     }
@@ -84,13 +89,17 @@ public class CompletedFragment extends Fragment {
                         idlist.add(id);
                     }
                 }
-                for(int i=0;i<idlist.size();i++){
-                    IdModel idmodel = new IdModel(list.get(i).getIsaccepted(),list.get(i).getOrderStatus(),list.get(i).getPaid(),list.get(i).get_id(),list.get(i).getItemName(),list.get(i).getItemId(),list.get(i).getPrice(),list.get(i).getRating(),idlist.get(i));
+                for (int i = 0; i < idlist.size(); i++) {
+                    IdModel idmodel = new IdModel(list.get(i).getIsaccepted(), list.get(i).getOrderStatus(), list.get(i).getPaid(), list.get(i).get_id(), list.get(i).getItemName(), list.get(i).getItemId(), list.get(i).getPrice(), list.get(i).getRating(), idlist.get(i));
                     finalList.add(idmodel);
                 }
-                orderAdapter = new OrderAdapter(finalList, context);
-                recyclerView.setAdapter(orderAdapter);
-                // Toast.makeText(context, "Food is: "+orderList.getOrders().get(0).getItemName(), Toast.LENGTH_LONG).show();
+                if (finalList.size() != 0) {
+                    constraintLayout.setVisibility(View.VISIBLE);
+                    linearLayout.setVisibility(View.GONE);
+                    orderAdapter = new OrderAdapter(finalList, context);
+                    recyclerView.setAdapter(orderAdapter);
+                    // Toast.makeText(context, "Food is: "+orderList.getOrders().get(0).getItemName(), Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

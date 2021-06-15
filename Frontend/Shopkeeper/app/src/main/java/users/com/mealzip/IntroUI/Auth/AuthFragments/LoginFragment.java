@@ -12,9 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.style.Circle;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.json.JSONException;
@@ -33,6 +36,8 @@ import users.com.mealzip.Request.LoginRequest;
 import users.com.mealzip.Response.LoginResponse;
 
 public class LoginFragment extends Fragment {
+    ProgressBar progressBar;
+    Circle pb;
     TextView signup,resetpass;
     Button login;
     EditText etemail, et_password;
@@ -53,6 +58,10 @@ public class LoginFragment extends Fragment {
         resetpass=view.findViewById(R.id.tv_resetpass);
         et_password=view.findViewById(R.id.etpassword);
 
+        progressBar = view.findViewById(R.id.spin_kit);
+        pb = new Circle();
+        progressBar.setIndeterminateDrawable(pb);
+
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,6 +74,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 loginuser();
+                progressBar.setVisibility(View.VISIBLE);
             }
         });
 
@@ -108,6 +118,7 @@ public class LoginFragment extends Fragment {
                 @Override
                 public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                     if(!response.isSuccessful()){
+                        progressBar.setVisibility(View.GONE);
                         String error= null;
                         try {
                             error = response.errorBody().string();
@@ -120,6 +131,7 @@ public class LoginFragment extends Fragment {
                         }
                     }
                     else {
+                        progressBar.setVisibility(View.GONE);
                         LoginResponse res = response.body();
                         String msg= res.getMessage();
                         String accesstoken = res.getSignAccessToken();

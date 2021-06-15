@@ -29,7 +29,7 @@ public class ToporderRepo {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String currentDate = sdf.format(calendar.getTime());
-        GettopRequest gettopRequest= new GettopRequest(currentDate, Prefs.getString("userID",""));
+        GettopRequest gettopRequest= new GettopRequest(currentDate,Prefs.getString("userID","6004416d42015d0017ef3e60"));
         Call<List<TodaysModel>> call = Retroclient.getInstance().getapi().gettop(gettopRequest);
 
 
